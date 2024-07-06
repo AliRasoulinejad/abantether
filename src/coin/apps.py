@@ -1,7 +1,7 @@
 from django.apps import AppConfig
 
 
-class ClinicConfig(AppConfig):
+class CoinConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
     name = 'coin'
     label = 'coin'
