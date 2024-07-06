@@ -25,6 +25,8 @@ CSRF_TRUSTED_ORIGINS = env.list("CSRF_TRUSTED_ORIGINS", default=[])
 
 # Application definition
 LOCAL_APPS = [
+    "coin",
+    "common",
     "user",
 ]
 
