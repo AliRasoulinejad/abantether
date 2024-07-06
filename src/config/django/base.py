@@ -28,6 +28,7 @@ LOCAL_APPS = [
     "coin",
     "common",
     "user",
+    "wallet",
 ]
 
 THIRD_PARTY_APPS = [
