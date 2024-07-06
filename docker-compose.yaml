@@ -1,0 +1,41 @@
+services:
+  app:
+    container_name: abantether
+    image: abantether:latest
+    build:
+      context: .
+      dockerfile: Dockerfile.local
+    command: >
+      bash -c "python manage.py migrate
+      && gunicorn --workers=3 --timeout=600 --bind=0.0.0.0:8000 config.wsgi:application"
+    depends_on:
+      - postgres
+      - redis
+    env_file:
+      - .compose/config.env
+    networks:
+      - abantether
+    ports:
+      - "8000:8000"
+    restart: always
+
+  postgres:
+    container_name: abantether_postgres
+    image: postgres:alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: abantether
+    networks:
+      - abantether
+    ports:
+      - "5432:5432"
+    restart: always
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+networks:
+  abantether:
+
+volumes:
+  postgres-data:

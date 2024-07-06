@@ -1,0 +1,9 @@
+.coveragerc
+.flake8
+.gitignore
+config.example.env
+docker-compose.yaml
+Makefile
+README.md
+
+.github/
