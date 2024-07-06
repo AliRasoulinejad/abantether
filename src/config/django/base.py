@@ -25,17 +25,12 @@ CSRF_TRUSTED_ORIGINS = env.list("CSRF_TRUSTED_ORIGINS", default=[])
 
 # Application definition
 LOCAL_APPS = [
-    "contract_apps.contract",
-    "common",
-    "user_apps.user",
+    "user",
 ]
 
 THIRD_PARTY_APPS = [
     "rest_framework",
     "rest_framework_simplejwt",
-    "corsheaders",
-    "django_softdelete",
-    "django_admin_listfilter_dropdown",
     "drf_yasg",
 ]
 
@@ -53,7 +48,6 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
-    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.locale.LocaleMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -145,13 +139,12 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-AUTH_USER_MODEL = "user_apps_user.User"
+AUTH_USER_MODEL = "user.User"
 
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 
 APPEND_SLASH = True
 
-from config.settings.cors import *  # noqa
 from config.settings.drf import *  # noqa
 from config.settings.logging import *  # noqa
 from config.settings.jwt import *  # noqa
