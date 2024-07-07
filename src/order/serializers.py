@@ -10,7 +10,7 @@ class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = ["id", "user", "coin", "amount"]
-        read_only_fields = fields
+        read_only_fields = ["id"]
 
     def create(self, validated_data):
         order = order_create(user=validated_data["user"], coin=validated_data["coin"], amount=validated_data["amount"])

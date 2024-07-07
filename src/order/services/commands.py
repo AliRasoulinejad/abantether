@@ -35,16 +35,17 @@ lua_script_sha = settings.REDIS.script_load(lua_script)
 @transaction.atomic
 def order_create(*, user: User, coin: Coin, amount: Decimal):
     order = Order.objects.create(user=user, coin=coin, amount=amount)
-    wallet_discharge(user.wallet, amount)
+    total_price = coin.price * amount
+    wallet_discharge(wallet=user.wallet, amount=total_price)
     coin_list = order_list.format(coin=coin.name)
-    if amount < settings.MINIMUM_ORDER_AMOUNT:
-        amount_to_pay = settings.REDIS.evalsha(lua_script_sha, 1, coin_list, amount, settings.MINIMUM_ORDER_AMOUNT)
+    if total_price < settings.MINIMUM_ORDER_AMOUNT:
+        to_pay = settings.REDIS.evalsha(lua_script_sha, 1, coin_list, float(total_price), settings.MINIMUM_ORDER_AMOUNT)
     else:
-        amount_to_pay = amount
+        to_pay = total_price
 
-    if not amount_to_pay:
+    if not to_pay:
         return order
 
-    buy_from_exchange(coin, amount_to_pay)
+    buy_from_exchange(coin=coin, amount=to_pay)
 
     return order
