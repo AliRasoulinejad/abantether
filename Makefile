@@ -17,6 +17,9 @@ make-migration:
 migrate:
 	poetry run ./src/manage.py migrate
 
+shell:
+	poetry run ./src/manage.py shell
+
 ## docker compose
 build:
 	sudo docker build . -t abantether:latest -f Dockerfile
@@ -30,7 +33,8 @@ prepare-compose:
 		sed -i -e 's/POSTGRES_NAME=NAME/POSTGRES_NAME=abantether/g' .compose/config.env; \
 		sed -i -e 's/POSTGRES_USER=USER/POSTGRES_USER=postgres/g' .compose/config.env; \
 		sed -i -e 's/POSTGRES_PASSWORD=PASSWORD/POSTGRES_PASSWORD=postgres/g' .compose/config.env; \
-		sed -i -e 's/POSTGRES_HOST=HOST/POSTGRES_HOST=postgres/g' .compose/config.env;
+		sed -i -e 's/POSTGRES_HOST=HOST/POSTGRES_HOST=postgres/g' .compose/config.env; \
+		sed -i -e 's/REDIS_HOST=LOCALHOST/REDIS_HOST=redis/g' .compose/config.env; \
 	fi;
 
 up:

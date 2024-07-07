@@ -4,10 +4,12 @@ services:
     image: abantether:latest
     build:
       context: .
-      dockerfile: Dockerfile.local
-    command: >
+      dockerfile: Dockerfile
+    command:
       bash -c "python manage.py migrate
-      && gunicorn --workers=3 --timeout=600 --bind=0.0.0.0:8000 config.wsgi:application"
+      && python manage.py runserver 0.0.0.0:8000"  # to load swagger static files
+#      && gunicorn --workers=3 --timeout=600 --bind=0.0.0.0:8000 config.wsgi:application"
+
     depends_on:
       - postgres
       - redis
@@ -26,6 +28,11 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: abantether
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
     networks:
       - abantether
     ports:
@@ -34,8 +41,20 @@ services:
     volumes:
       - postgres-data:/var/lib/postgresql/data
 
+  redis:
+    container_name: abantether_redis
+    image: redis:7.2
+    networks:
+      - abantether
+    ports:
+      - "6379:6379"
+    restart: always
+    volumes:
+      - redis-data:/data
+
 networks:
   abantether:
 
 volumes:
   postgres-data:
+  redis-data:
