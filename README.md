@@ -51,7 +51,7 @@ You can use docs by this link:
 
 
 ## Testing
-1. Run tests with:
-    ```bash
+Unfortunately, I had no time to write tests, but in future we can run tests by this command:
+   ```bash 
    python manage.py test
-    ```
+   ```
