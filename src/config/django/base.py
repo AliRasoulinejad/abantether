@@ -150,7 +150,9 @@ SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 
 APPEND_SLASH = True
 
+from config.settings.app import *  # noqa
 from config.settings.drf import *  # noqa
-from config.settings.logging import *  # noqa
 from config.settings.jwt import *  # noqa
+from config.settings.logging import *  # noqa
+from config.settings.redis import *  # noqa
 from config.settings.swagger import *  # noqa
