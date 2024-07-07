@@ -1,7 +1,10 @@
+from rest_framework import status
+from rest_framework.response import Response
+
 from common.pagination import StandardResultsSetPagination
 from common.viewsets import RetrieveListModelViewSet, RetrieveModelViewSet
 from wallet.models import Wallet, Transaction
-from wallet.serializers import TransactionSerializer, WalletSerializer
+from wallet.serializers import TransactionSerializer, WalletSerializer, ChargeSerializer
 
 
 class WalletViewSet(RetrieveModelViewSet):
@@ -10,6 +13,14 @@ class WalletViewSet(RetrieveModelViewSet):
 
     def get_object(self):
         return self.request.user.wallet
+
+    def charge(self, request, *args, **kwargs):
+        self.serializer_class = ChargeSerializer
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class TransactionViewSet(RetrieveListModelViewSet):
