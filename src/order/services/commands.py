@@ -7,7 +7,7 @@ from coin.models import Coin
 from exchange.services.commands import buy_from_exchange
 from order.models import Order
 from user.models import User
-from wallet.services.commands import wallet_discharge
+from wallet.services.commands import wallet_discharge, wallet_check_balance_to_buy
 
 order_list = "orders-{coin}"
 
@@ -49,3 +49,9 @@ def order_create(*, user: User, coin: Coin, amount: Decimal):
     buy_from_exchange(coin=coin, amount=to_pay)
 
     return order
+
+
+def order_check_possibility(*, user: User, coin: Coin, amount: Decimal):
+    total_price = coin.price * amount
+    is_eligible = wallet_check_balance_to_buy(wallet=user.wallet, amount=total_price)
+    return is_eligible
